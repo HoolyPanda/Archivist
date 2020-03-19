@@ -1,6 +1,7 @@
 import vk_api
 import LongPollServer
 
+
 class Knocker:
     def __init__(self):
         # self.login = open('./login.cred', 'r').read()
@@ -9,10 +10,10 @@ class Knocker:
         pass
 
     def Auth(self):
-        self.session = vk_api.VkApi(token= self.token)
+        self.session = vk_api.VkApi(token=self.token)
         try:
             self.session._auth_token()
-            
+
         except Exception as e:
             print(str(e))
             quit
