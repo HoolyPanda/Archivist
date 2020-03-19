@@ -1,11 +1,22 @@
 import random
 from assets.Controller.DataController import SearchForData, GetTitles, LoadSecretFile, SaveSecretFiles
 import base64
+import threading
+import time
 
 class MainView():
     def __init__(self, session, id, event):
         self.vkID = id
         self.session = session
+        pass
+
+    def DeleteMsg(self, msgID: []):
+        time.sleep(300)
+        for id in msgID:
+            self.session.method('messages.delete', {
+                'message_ids': id,
+                'delete_for_all': 1
+            })
         pass
 
     def ParseEvent(self, event):
@@ -30,16 +41,22 @@ class MainView():
             fileName = str(decodedText, encoding= 'utf-8')
             responce = LoadSecretFile(fileName)
             if responce:
-                self.session.method('messages.send', {
+                msgIDs = []
+                a = self.session.method('messages.send', {
                     'message': f'Получен доступ к секретному файлу {fileName}',
                     'peer_id': self.vkID,
                     'random_id': random.randint(1, 10000000000000)
                 })
-                self.session.method('messages.send', {
+                msgIDs.append(a)
+                a = self.session.method('messages.send', {
                     'message': f'{responce}',
                     'peer_id': self.vkID,
                     'random_id': random.randint(1, 10000000000000)
                 })
+                msgIDs.append(a)
+                b = 0
+                t = threading.Thread(target= self.DeleteMsg, kwargs={'msgID': msgIDs}, daemon= True)
+                t.start()
             else:
                 self.session.method('messages.send', {
                     'message': f'Код отсутствует в Базе Данных',
