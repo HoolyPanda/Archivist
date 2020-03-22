@@ -42,6 +42,7 @@ class MainView():
             responce = LoadSecretFile(fileName)
             if responce:
                 msgIDs = []
+                # msgIDs.append(event['id'])
                 a = self.session.method('messages.send', {
                     'message': f'Получен доступ к секретному файлу {fileName}',
                     'peer_id': self.vkID,
@@ -57,7 +58,7 @@ class MainView():
                 b = 0
                 t = threading.Thread(target= self.DeleteMsg, kwargs={'msgID': msgIDs}, daemon= True)
                 t.start()
-            else:
+            elif not responce:
                 self.session.method('messages.send', {
                     'message': f'Код отсутствует в Базе Данных',
                     'peer_id': self.vkID,

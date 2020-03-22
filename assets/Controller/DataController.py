@@ -20,9 +20,10 @@ def GetTitles():
 
 def LoadSecretFile(title: str):
     filesPath = './HiddenDB/Files/'
-    for file in os.listdir(filesPath):
-        if title in file:
-            return open(f'{filesPath}{file}').read()
+    if title:
+        for file in os.listdir(filesPath):
+            if title in file:
+                return open(f'{filesPath}{file}').read()
     return False
 
 def GenerateQR(text: str):
